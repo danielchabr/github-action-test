@@ -1,0 +1,24 @@
+name: Labels Check
+on:
+  push:
+    branches:
+      - 'staging'
+  pull_request:
+    types: [opened, edited, labeled, unlabeled, synchronize]
+jobs:
+  QA-check:
+    name: QA check
+    if: github.base_ref == 'master' || contains(github.ref, 'staging')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: danielchabr/pr-labels-checker@v2.2
+        with:
+          hasSome: QA:tested,QA:skipped
+  Do_not_merge-check:
+    name: Do-not-merge check
+    if: github.base_ref == 'master' || contains(github.ref, 'staging')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: danielchabr/pr-labels-checker@v2.2
+        with:
+          hasNone: do not merge,blocked
